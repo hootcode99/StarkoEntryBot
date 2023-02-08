@@ -39,32 +39,38 @@ old_page_source = driver.page_source
 print("Test Complete\n------------------------")
 
 print("Begin")
-with open('attempted_words.txt', 'a') as prev_attempts_file:
-    for word in words:
-        input_field.clear()
-        input_field.send_keys("word")
-        input_field.send_keys(Keys.RETURN)
-        t.sleep(speed)
+for word in words:
+    input_field.clear()
+    input_field.send_keys("word")
+    input_field.send_keys(Keys.RETURN)
+    t.sleep(speed)
 
-        # if the password box still exists
-        if len(driver.find_elements(By.CLASS_NAME, "password-input")) == 0:
-            answer = word
-            print("Password box element no longer found")
-            t.sleep(2)
-            break
+    # if the password box still exists
+    if len(driver.find_elements(By.CLASS_NAME, "password-input")) == 0:
+        answer = word
+        print("Password box element no longer found")
+        t.sleep(2)
+        break
 
-        # if the url of the page changes
-        elif driver.current_url != "https://starkogear.com/":
-            answer = word
-            print(f'URL CHANGED: {driver.current_url}')
-            t.sleep(2)
-            break
+    # if the url of the page changes
+    elif driver.current_url != "https://starkogear.com/":
+        answer = word
+        print(f'URL CHANGED: {driver.current_url}')
+        t.sleep(2)
+        break
 
-        prev_attempts_file.write(word + "\n")
-        old_page_source = driver.page_source
+    new_attempts.add(word)
+    old_page_source = driver.page_source
 
 print(f"FINISHED\nANSWER: {answer}\nNew Attempts {len(new_attempts)}"
       f"\nTotal Attempts {len(previous_attempts) + len(new_attempts)}\n------------------------")
+
+# save a record of the words tried to a file
+print("Writing to attempts to file")
+with open('attempted_words.txt', 'a') as prev_attempts_file:
+    for word in new_attempts:
+        prev_attempts_file.write(word + "\n")
+print("Complete\n------------------------")
 
 t.sleep(60)
 # driver.quit()
