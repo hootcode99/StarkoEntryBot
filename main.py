@@ -21,7 +21,7 @@ with open("words_alpha.txt", "r") as dictionary_file:
         if 4 < len(stripped_line) < 10:
             if line not in previous_attempts:
                 words.append(line.strip())
-
+print(f'Words left to search->{len(words)}\n------------------------')
 # Initialize the webdriver
 driver = webdriver.Chrome()
 driver.get("https://www.starkogear.com")
