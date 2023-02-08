@@ -1,8 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
 import time as t
-
 
 answer = ""
 speed = .26
@@ -25,8 +25,15 @@ with open("words_alpha.txt", "r") as dictionary_file:
                 words.append(line.strip())
 print(f'Words left to search->{len(words)}\n------------------------')
 
-# Initialize the webdriver and get the password field and error message box
-driver = webdriver.Chrome()
+# modification to browser
+chrome_options = Options()
+chrome_options.add_argument("--disable-gpu")
+chrome_options.add_argument("--disable-extensions")
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--window-size=960,1080")
+
+# Initialize the webdriver, options, and get the password field and error message box
+driver = webdriver.Chrome(chrome_options=chrome_options)
 driver.get("https://www.starkogear.com")
 input_field = driver.find_element(By.CLASS_NAME, "password-input")
 error_message = driver.find_element(By.CLASS_NAME, "error-message")
